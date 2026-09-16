@@ -1,0 +1,27 @@
+# Prueft, ob die Beschreibung noch zur Uhr-App passt.
+#
+# WOECHENTLICH und nicht nur bei Push: die Aenderung, die hier gefangen werden
+# soll, passiert im Repo der Uhr-App Drinktervall, nicht in diesem. Eine neue Zeile
+# in deren messageKeys verschiebt die Nummern, und diese Beschreibung traegt
+# danach still falsche Werte ein. Ohne den Zeitplan faende das niemand, bis
+# jemand zufaellig hier etwas aendert.
+name: Beschreibung pruefen
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # Montags um 6 Uhr UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Schluesselnummern gegen Drinktervall pruefen
+        run: node tools/pruefe.js
